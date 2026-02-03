@@ -152,11 +152,23 @@ function App() {
   React.useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
-      audio.volume = 0.5; // Set volume to 50%
-      audio.play().catch(() => {
-        // Autoplay blocked - will play on first click
-        console.log("Waiting for user interaction to play audio");
-      });
+      audio.volume = 0.5;
+      audio.preload = 'auto'; // Force preload
+
+      // Try to play when audio is ready
+      const tryPlay = () => {
+        audio.play().catch(() => {
+          console.log("Waiting for user interaction");
+        });
+      };
+
+      // Play as soon as enough data is loaded
+      audio.addEventListener('canplaythrough', tryPlay);
+
+      // Also try immediately
+      tryPlay();
+
+      return () => audio.removeEventListener('canplaythrough', tryPlay);
     }
   }, []);
 
