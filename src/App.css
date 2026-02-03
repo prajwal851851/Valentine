@@ -370,28 +370,55 @@ p {
 }
 
 /* Responsive */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .app-container::before {
+    width: 300px;
+    height: 300px;
+  }
 
   .proposal-card,
   .letter-card {
-    padding: 50px 30px;
+    padding: 40px 25px;
     border-radius: 30px;
+    backdrop-filter: blur(8px);
+    /* Reduced from 20px */
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 15px 30px rgba(255, 77, 109, 0.15);
+    /* Simplified shadow */
   }
 
   h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    text-shadow: none;
+    /* Expensive on some mobile browsers */
   }
 
   .btn {
-    padding: 16px 35px;
-    font-size: 1rem;
+    padding: 14px 30px;
+    font-size: 0.95rem;
   }
 
   .celebration-emoji {
-    font-size: 4rem;
+    font-size: 3.5rem;
   }
 
   .celebration-view h2 {
-    font-size: 2rem;
+    font-size: 1.8rem;
+  }
+
+  .btn-yes {
+    animation: none;
+    /* Disable pulsing for better FPS */
+  }
+
+  .bg-heart {
+    filter: none;
+    /* Remove blur from falling hearts */
+  }
+
+  .sparkle-left,
+  .sparkle-right {
+    display: none;
+    /* Hide expensive extra sparkles */
   }
 }

@@ -114,8 +114,11 @@ function App() {
   const noBtnRef = useRef(null);
   const cardRef = useRef(null);
 
-  // Background hearts
-  const hearts = useRef([...Array(15)].map((_, i) => ({
+  // Detect mobile for performance optimization
+  const isMobile = window.innerWidth < 768;
+
+  // Background hearts - fewer on mobile
+  const hearts = useRef([...Array(isMobile ? 6 : 15)].map((_, i) => ({
     id: i,
     left: `${Math.random() * 100}%`,
     delay: `${Math.random() * 10}s`,
@@ -123,8 +126,8 @@ function App() {
     size: `${1.2 + Math.random() * 1.5}rem`
   })));
 
-  // Floating sparkles for home page
-  const sparkles = useRef([...Array(8)].map((_, i) => ({
+  // Floating sparkles - fewer on mobile
+  const sparkles = useRef([...Array(isMobile ? 3 : 8)].map((_, i) => ({
     id: i,
     x: 10 + Math.random() * 80,
     y: 10 + Math.random() * 80,
@@ -132,8 +135,8 @@ function App() {
     size: 20 + Math.random() * 15
   })));
 
-  // Emoji rain - falling from top
-  const emojiRain = useRef([...Array(30)].map((_, i) => ({
+  // Emoji rain - fewer on mobile
+  const emojiRain = useRef([...Array(isMobile ? 10 : 30)].map((_, i) => ({
     id: i,
     emoji: RAIN_EMOJIS[Math.floor(Math.random() * RAIN_EMOJIS.length)],
     left: `${Math.random() * 100}%`,
@@ -206,63 +209,74 @@ function App() {
 
   const triggerFirecrackers = () => {
     const colors = ['#ff4d6d', '#ff758f', '#ffd700', '#ff6b6b', '#ffffff', '#ffccd5'];
+    const particleBase = isMobile ? 30 : 100;
 
     confetti({
-      particleCount: 100,
+      particleCount: particleBase,
       spread: 360,
       origin: { x: 0.5, y: 0.5 },
       colors,
       startVelocity: 45,
       gravity: 0.8,
-      ticks: 300
+      ticks: isMobile ? 150 : 300
     });
 
     const explode = (x, y, delay) => {
       setTimeout(() => {
         confetti({
-          particleCount: 80,
+          particleCount: isMobile ? 25 : 80,
           spread: 360,
           origin: { x, y },
           colors,
           startVelocity: 40,
           gravity: 1,
-          ticks: 250
+          ticks: isMobile ? 150 : 250
         });
       }, delay);
     };
 
-    explode(0.2, 0.3, 200);
-    explode(0.8, 0.3, 400);
-    explode(0.3, 0.7, 600);
-    explode(0.7, 0.7, 800);
-    explode(0.5, 0.2, 1000);
-    explode(0.1, 0.5, 1200);
-    explode(0.9, 0.5, 1400);
+    // Fewer explosions on mobile
+    if (isMobile) {
+      explode(0.3, 0.4, 300);
+      explode(0.7, 0.4, 600);
+    } else {
+      explode(0.2, 0.3, 200);
+      explode(0.8, 0.3, 400);
+      explode(0.3, 0.7, 600);
+      explode(0.7, 0.7, 800);
+      explode(0.5, 0.2, 1000);
+      explode(0.1, 0.5, 1200);
+      explode(0.9, 0.5, 1400);
+    }
 
+    // Final burst - smaller on mobile
     setTimeout(() => {
       confetti({
-        particleCount: 150,
+        particleCount: isMobile ? 40 : 150,
         spread: 360,
         origin: { x: 0.5, y: 0.4 },
         colors: ['#ff4d6d', '#ffd700', '#ffffff'],
-        startVelocity: 55,
+        startVelocity: isMobile ? 35 : 55,
         gravity: 0.6,
-        ticks: 400
+        ticks: isMobile ? 200 : 400
       });
-    }, 1800);
+    }, isMobile ? 800 : 1800);
 
-    let burstCount = 0;
-    const burstInterval = setInterval(() => {
-      confetti({
-        particleCount: 30,
-        spread: 100,
-        origin: { x: Math.random(), y: Math.random() * 0.5 },
-        colors,
-        startVelocity: 30
-      });
-      burstCount++;
-      if (burstCount > 8) clearInterval(burstInterval);
-    }, 400);
+    // Continuous bursts - skip on mobile
+    if (!isMobile) {
+      let burstCount = 0;
+      const burstInterval = setInterval(() => {
+        confetti({
+          particleCount: 30,
+          spread: 100,
+          origin: { x: Math.random(), y: Math.random() * 0.5 },
+          colors,
+          startVelocity: 30
+        });
+        burstCount++;
+        if (burstCount > 8) clearInterval(burstInterval);
+      }, 400);
+    }
   };
 
   // Text animation variants
@@ -383,13 +397,13 @@ function App() {
                 className="floating-icon"
               >
                 <motion.div
-                  animate={{
+                  animate={!isMobile ? {
                     filter: [
                       "drop-shadow(0 0 10px rgba(255, 77, 109, 0.3))",
                       "drop-shadow(0 0 25px rgba(255, 77, 109, 0.6))",
                       "drop-shadow(0 0 10px rgba(255, 77, 109, 0.3))"
                     ]
-                  }}
+                  } : {}}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
                   <Heart size={100} color="#ff4d6d" fill="#ff4d6d" />
