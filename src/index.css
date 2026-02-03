@@ -1,0 +1,59 @@
+:root {
+  --bg-color: #fff5f7;
+  --card-bg: #ffffff;
+  --primary-pink: #ff4d6d;
+  --primary-pink-dark: #c9184a;
+  --secondary-pink: #ff758c;
+  --text-main: #2d3436;
+  --text-muted: #636e72;
+  --shadow-soft: 0 20px 40px rgba(0, 0, 0, 0.05);
+  --shadow-medium: 0 10px 20px rgba(255, 77, 109, 0.1);
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1,
+h2 {
+  font-family: var(--font-serif);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-soft);
+}
